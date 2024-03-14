@@ -17,6 +17,7 @@ const jwtVerify = async (payload, done) => {
     if (!user) {
       return done(null, false);
     }
+    console.log("user",user);
     done(null, user);
   } catch (error) {
     done(error, false);

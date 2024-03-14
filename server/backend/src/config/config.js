@@ -23,6 +23,8 @@ const envVarsSchema = Joi.object()
     SMTP_USERNAME: Joi.string().description('username for email server'),
     SMTP_PASSWORD: Joi.string().description('password for email server'),
     EMAIL_FROM: Joi.string().description('the from field in the emails sent by the app'),
+    SECRET_ACCESS_KEY:Joi.string().description('Secret key to sign presigned url from s3 in amazon s3'),
+    ACCESS_KEY_ID:Joi.string().description('Access key to sign presigned url from s3 in amazon s3'),
   })
   .unknown();
 
@@ -61,4 +63,8 @@ module.exports = {
     },
     from: envVars.EMAIL_FROM,
   },
+  aws:{
+    accesskeyId:envVars.ACCESS_KEY_ID,
+    secretKey:envVars.SECRET_ACCESS_KEY
+  }
 };
