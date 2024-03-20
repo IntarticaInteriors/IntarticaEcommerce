@@ -44,6 +44,10 @@ const userSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    // isBusiness:{
+    //   type:Boolean,
+    //   required:true
+    // },
   },
   {
     timestamps: true,

@@ -4,7 +4,6 @@ const axios = require("axios");
 const backendUrl = "http://localhost:3000/v1"; // Replace with your actual variable name from .env
 
 export const signup = async (payload) => {
-  console.log("backendurl", backendUrl);
   try {
     const response = await axios.post(`${backendUrl}/auth/register`, payload);
     console.log("Signup successful:", response.data);

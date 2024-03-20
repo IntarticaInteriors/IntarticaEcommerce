@@ -1,6 +1,9 @@
 const httpStatus = require('http-status');
 const { User } = require('../models');
 const ApiError = require('../utils/ApiError');
+const { PrismaClient } = require('@prisma/client');
+
+const prisma = new PrismaClient();
 
 /**
  * Create a user
@@ -8,10 +11,19 @@ const ApiError = require('../utils/ApiError');
  * @returns {Promise<User>}
  */
 const createUser = async (userBody) => {
+  const { isBusiness , ...rest} = userBody;
   if (await User.isEmailTaken(userBody.email)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
   }
-  return User.create(userBody);
+  const createdUser = await prisma.user.create({
+    data: {
+      name: userBody.name,
+      email: userBody.email,
+      isBusiness: isBusiness,
+    },
+  });
+  console.log("created user",createdUser);
+  return User.create(rest);
 };
 
 /**
@@ -59,6 +71,15 @@ const updateUserById = async (userId, updateBody) => {
   }
   if (updateBody.email && (await User.isEmailTaken(updateBody.email, userId))) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken');
+  }
+  if (updateBody.phone || updateBody.address) {
+    const emailtobeused=user.email;
+    const updatedUser=await prisma.user.findFirst({
+      where:{
+        email:emailtobeused
+      },
+      data:updateBody
+    })
   }
   Object.assign(user, updateBody);
   await user.save();
