@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ColumnDef,
   useReactTable,
@@ -23,6 +23,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
+import { getProducts } from "../../../services/admin.services";
 
 const data: Product[] = [
   {
@@ -141,6 +143,15 @@ const page = () => {
     getCoreRowModel: getCoreRowModel(), // Include getCoreRowModel here
   });
 
+  useEffect(() => {
+    try {
+      const response = getProducts();
+      console.log("get products:", response);
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
+
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
@@ -154,6 +165,7 @@ const page = () => {
           }
           className="max-w-sm"
         />
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
@@ -176,6 +188,9 @@ const page = () => {
               ))}
           </DropdownMenuContent>
         </DropdownMenu>
+        <Button variant="default" className="ml-3" onClick={() => {}}>
+          Add Product
+        </Button>
       </div>
       <div className="rounded-md border">
         <Table>
