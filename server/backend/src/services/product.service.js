@@ -3,9 +3,8 @@ const httpStatus = require('http-status');
 const ApiError = require('../utils/ApiError');
 const prisma = new PrismaClient();
 const crypto = require('crypto');
-const { S3Client, PutObjectCommand ,GetObjectCommand} = require('@aws-sdk/client-s3');
-const {getSignedUrl}=require("@aws-sdk/s3-request-presigner")
-const {getObjectURL}=require("../aws/s3Routes");
+const { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } = require('@aws-sdk/client-s3');
+const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 const RandomImageName = (bytes = 32) => crypto.randomBytes(bytes).toString('hex');
 
 const s3 = new S3Client({
@@ -21,22 +20,10 @@ const s3 = new S3Client({
  * @param {Object} productBody
  * @returns {Promise<prisma.products>}
  */
-//
-// const putObjectURL=async(filename,contentType)=>{
-//   //key as in where to store
-//   const command= new PutObjectCommand({
-//       Bucket:"eazymaterials",
-//       Key:`/uploads/user-uploads/${filename}`,
-//       ContentType:contentType
-//   })
-//   const url=await getSignedUrl(s3Client,command);
-//   return url;
-// }
-//
 
 const createProduct = async (productBody, productFiles) => {
-  const { name, description, Category, brand, size, price, picture, stockAvailable, color } = productBody;
 
+  const { name, description, Category, brand, size, price, stockAvailable, color } = productBody;
   
   let Names = [];
   for (const elem of productFiles) {
@@ -46,62 +33,34 @@ const createProduct = async (productBody, productFiles) => {
       Bucket: 'eazymaterials',
       Key: Imagename,
       Body: elem.buffer,
-      ContentType: elem.mimetype,
+      ContentType: "image/jpeg",
     };
 
     const command = new PutObjectCommand(params);
     await s3.send(command);
   }
 
-  console.log('Names', Names);
-
-  let ArrayofURLS=[];
-  for (const element of Names) {
-    const url = await getObjectURL(element);
-    ArrayofURLS = [...ArrayofURLS, url];
-    console.log("ArrayofURLS", ArrayofURLS);
-  }
-  
-  if(ArrayofURLS.length > 0){
-    console.log("Length is greater than one");
-  }
-
-  // const findProduct = await prisma.products.findFirst({
-  //   where: {
-  //     name: name,
-  //     description: {equals:description},
-  //     brand: brand,
-  //     size: size,
-  //     price: price,
-  //     // picture: {equals: picture},
-  //     color:color
-  //   },
-  // });
-
-  // if (findProduct) {
-  //   throw new ApiError(httpStatus.BAD_REQUEST, 'Product already exists');
-  // }
-
   // Create a new product
-  // const createdProduct = await prisma.products.create({
-  //   data: {
-  //     name: name,
-  //     description: description,
-  //     Category: {
-  //       connect: {
-  //         name: Category,
-  //       },
-  //     },
-  //     brand: brand,
-  //     size: size,
-  //     price: price,
-  //     picture: picture,
-  //     stockAvailable: stockAvailable,
-  //     color:color
-  //   },
-  // });
-  // return createdProduct;
-  return 'uploaded product';
+  const createdProduct = await prisma.products.create({
+    data: {
+      name: name,
+      description: description,
+      Category: {
+        connect: {
+          name: Category,
+        },
+      },
+      brand: brand,
+      size: parseInt(size),
+      price: parseFloat(price),
+      picture: Names[0],
+      stockAvailable: parseInt(stockAvailable),
+      color: color,
+      images: Names,
+    },
+  });
+  return createdProduct;
+  // return 'uploaded product';
 };
 /**
  * Get all products
@@ -110,6 +69,18 @@ const createProduct = async (productBody, productFiles) => {
  */
 const getAllProducts = async () => {
   const products = await prisma.products.findMany();
+  for (let product of products) {
+    const getObjectParams = {
+      Bucket: 'eazymaterials',
+      Key: product.picture,
+    };
+    const command = new GetObjectCommand(getObjectParams);
+    const url = await getSignedUrl(s3, command);
+    product.imageUrl = url;
+    console.log('product', product);
+  }
+  console.log('products', products);
+
   return products;
 };
 
@@ -120,6 +91,17 @@ const getAllProducts = async () => {
  */
 const getProductById = async (prod_id) => {
   const foundProduct = await prisma.products.findUnique({ where: { prod_id: prod_id } });
+  foundProduct.imagesURLS=[];
+  for(const image of foundProduct.images){
+    const getObjectParams = {
+      Bucket: 'eazymaterials',
+      Key: image,
+    };
+    const command = new GetObjectCommand(getObjectParams);
+    const url = await getSignedUrl(s3, command);
+    foundProduct.imagesURLS = [...foundProduct.imagesURLS,url];
+  }
+  console.log('product', foundProduct);
   return foundProduct;
 };
 
@@ -166,6 +148,14 @@ const deleteProductById = async (prod_id) => {
   if (!product) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');
   }
+  for (const image of product.images) {
+    const params = {
+      Bucket: 'eazymaterials',
+      Key: image,
+    };
+    const command = DeleteObjectCommand(params);
+    await s3.send(command);
+  }
   const deletedProductById = await prisma.products.delete({
     where: { prod_id: prod_id },
   });
@@ -180,13 +170,3 @@ module.exports = {
   getProductById,
   getProductByName,
 };
-
-// const isCategoryTaken = async (name, prod_id) => {
-//   const existingCategory = await prisma.products.findUnique({
-//     where: {
-//       name: name,
-//     },
-//   });
-
-//   return !!existingCategory; // Returns true if the category email is taken, false otherwise
-// };

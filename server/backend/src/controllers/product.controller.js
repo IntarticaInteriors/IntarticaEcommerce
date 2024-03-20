@@ -3,16 +3,16 @@ const pick = require('../utils/pick');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
 const { productService } = require('../services');
-const config=require("../config/config");
-
+const config = require('../config/config');
 
 const createProduct = catchAsync(async (req, res) => {
-  console.log(req.files);
-  console.log(req.body);
+  console.log("req.headers",req.headers);
+  console.log('req.files', req.files);
+  console.log('req.body', req.body);
 
   // console.log(req.body);
-  
-  const createdProduct = await productService.createProduct(req.body,req.files);
+
+  const createdProduct = await productService.createProduct(req.body, req.files);
   // console.log(createdProduct);
   // res.status(httpStatus.CREATED).send(createdProduct);
   res.send(req.files);
@@ -37,7 +37,7 @@ const updateProduct = catchAsync(async (req, res) => {
 });
 
 const deleteProduct = catchAsync(async (req, res) => {
-  console.log("deleteProduct cid",req.params.prod_id);
+  console.log('deleteProduct cid', req.params.prod_id);
   await productService.deleteProductById(req.params.prod_id);
   res.status(httpStatus.NO_CONTENT).send();
 });

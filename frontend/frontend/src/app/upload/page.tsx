@@ -19,7 +19,7 @@ const Page = () => {
       formData.append(`captions[${index}]`, caption);
       console.log(files[index]);
     });
-
+    console.log("formData",formData);
     await axios.post(`${backendUrl}/products/create-product`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });

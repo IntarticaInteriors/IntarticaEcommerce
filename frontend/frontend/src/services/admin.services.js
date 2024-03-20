@@ -37,3 +37,43 @@ export const getProducts = async () => {
     throw error;
   }
 };
+
+//To do Tasks
+
+//API for update
+export const updateProduct = async (prod_id) => {
+  console.log("backendurl", backendUrl);
+  const token = localStorage.getItem("accessToken");
+  console.log(token);
+  try {
+    const config = { Headers: { Authorization: `Bearer ${token}` } };
+    const response = await axios.get(
+      `${backendUrl}/products/update-product/${prod_id}`,
+      config
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error.response ? error.response.data : error.message);
+    throw error;
+  }
+};
+
+//API for delete
+export const deleteProduct = async (prod_id) => {
+  console.log("backendurl", backendUrl);
+  const token = localStorage.getItem("accessToken");
+  console.log(token);
+  try {
+    const config = { Headers: { Authorization: `Bearer ${token}` } };
+    const response = await axios.get(
+      `${backendUrl}/products/delete-product/${prod_id}`,
+      config
+    );
+    return response.data;
+  } catch (error) {
+    console.error(error.response ? error.response.data : error.message);
+    throw error;
+  }
+};
+
+//API for categories CRUD
