@@ -8,7 +8,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <>
       <div>
         <AdminNavbar />
-        <div className="container flex w-screen gap-5">
+        <div className="container flex w-screen gap-10 h-[85vh] mt-28 ">
           <div style={{ width: "20%" }}>
             <AdminSidebar />
           </div>

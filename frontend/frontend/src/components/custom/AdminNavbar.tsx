@@ -12,7 +12,7 @@ import "./style.css";
 const AdminNavbar = () => {
   const [pincode, setPincode] = useState("123415");
   return (
-    <div className="flex justify-between px-10 py-1 items-center">
+    <div className="admin-navbar flex justify-between px-10 py-1 items-center border-b-orange-50">
       <div>
         <Image src="/Logo.png" width={150} height={66} alt="logo" />
       </div>
