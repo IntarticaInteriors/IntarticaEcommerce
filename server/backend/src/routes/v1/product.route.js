@@ -9,14 +9,12 @@ const upload = multer({ storage: storage });
 
 const router = express.Router();
 
-router
-  .route('/create-product')
-  .post(
-    auth('manageProducts'),
-    validate(productValidation.createProduct),
-    upload.array('image'),
-    productController.createProduct
-  );
+router.route('/create-product').post(
+  // auth('manageProducts'),
+  validate(productValidation.createProduct),
+  // upload.array('image'),
+  productController.createProduct
+);
 
 router.route('/get-product').get(productController.getProducts);
 
