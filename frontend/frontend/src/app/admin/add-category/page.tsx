@@ -19,7 +19,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
 
 // API's
-import { createCategory } from "../../../services/admin.services";
+import { createCategory } from "../../../services/category.services";
 
 const FormSchema = z.object({
   name: z.string().min(2, {

@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -21,7 +21,7 @@ import { toast } from "@/components/ui/use-toast";
 import { createProduct } from "../../../services/admin.services";
 
 const FormSchema = z.object({
-  productName: z.string().min(2, {
+  name: z.string().min(2, {
     message: "Product Name must be at least 2 characters.",
   }),
   brand: z.string().min(2, {
@@ -39,16 +39,17 @@ const FormSchema = z.object({
   discount: z.number().int().min(0, {
     message: "Discount must be a non-negative integer.",
   }),
-  picture: z.string(),
+  // picture: z.string(),
   stockAvailable: z.number().int().min(0, {
     message: "Stock Available must be a non-negative integer.",
   }),
   color: z.string(),
-  category_id: z.string(),
-  images: z.array(z.string()),
+  Category: z.string(),
+  images: z.array(z.instanceof(File)),
 });
 
 const Page = () => {
+  const [files, setFiles] = useState([]);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
@@ -63,6 +64,26 @@ const Page = () => {
       ),
     });
     console.log(data);
+
+    const formData = new FormData();
+    files.forEach((file, index) => {
+      formData.append(image, file);
+    });
+
+    const {
+      name,
+      description,
+      brand,
+      size,
+      price,
+      discount,
+      stockAvailable,
+      color,
+      Category,
+    } = data;
+
+    formData.append(name, name);
+    console.log(formData);
 
     try {
       const response = createProduct(data);
@@ -80,7 +101,7 @@ const Page = () => {
       >
         <FormField
           control={form.control}
-          name="productName"
+          name="name"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Product Name</FormLabel>
@@ -173,12 +194,17 @@ const Page = () => {
         />
         <FormField
           control={form.control}
-          name="picture"
+          name="images"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Picture</FormLabel>
+              <FormLabel>Images</FormLabel>
               <FormControl>
-                <Input placeholder="Picture URL" {...field} />
+                <Input
+                  multiple
+                  placeholder="Picture URL"
+                  type="file"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -217,12 +243,12 @@ const Page = () => {
         />
         <FormField
           control={form.control}
-          name="category_id"
+          name="Category"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Category ID</FormLabel>
               <FormControl>
-                <Input placeholder="Category ID" {...field} />
+                <Input placeholder="Category" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -230,7 +256,7 @@ const Page = () => {
         />
         {/* Assuming images are entered as comma-separated URLs */}
         {/* https://example.com/image1.jpg, https://example.com/image2.jpg, https://example.com/image3.jpg */}
-        <FormField
+        {/* <FormField
           control={form.control}
           name="images"
           render={({ field }) => (
@@ -252,7 +278,7 @@ const Page = () => {
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
 
         <Button type="submit">Submit</Button>
       </form>

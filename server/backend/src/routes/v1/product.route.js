@@ -11,8 +11,8 @@ const router = express.Router();
 
 router.route('/create-product').post(
   // auth('manageProducts'),
-  validate(productValidation.createProduct),
-  // upload.array('image'),
+  // validate(productValidation.createProduct),
+  upload.array('image'),
   productController.createProduct
 );
 

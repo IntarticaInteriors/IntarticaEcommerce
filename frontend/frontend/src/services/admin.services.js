@@ -8,7 +8,12 @@ export const createProduct = async (payload) => {
   const token = localStorage.getItem("accessToken");
   console.log(token);
   try {
-    const config = { Headers: { Authorization: `Bearer ${token}` } };
+    const config = {
+      Headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    };
     const response = await axios.post(
       `${backendUrl}/products/create-product`,
       payload,

@@ -25,7 +25,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { getCategories } from "../../../services/admin.services";
+import { getCategories } from "../../../services/category.services";
 
 const data: Category[] = [
   {
