@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/table";
 
 import { getProducts } from "../../../services/admin.services";
+import Link from "next/link";
 
 const data: Product[] = [
   {
@@ -188,9 +189,11 @@ const page = () => {
               ))}
           </DropdownMenuContent>
         </DropdownMenu>
-        <Button variant="default" className="ml-3" onClick={() => {}}>
-          Add Product
-        </Button>
+        <Link href="/admin/products/add-product">
+          <Button variant="default" className="ml-3" onClick={() => {}}>
+            Add Product
+          </Button>
+        </Link>
       </div>
       <div className="rounded-md border">
         <Table>

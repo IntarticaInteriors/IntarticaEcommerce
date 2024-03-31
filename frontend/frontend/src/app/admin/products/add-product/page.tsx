@@ -18,7 +18,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
 
 //API's
-import { createProduct } from "../../../services/admin.services";
+import { createProduct } from "../../../../services/admin.services";
 
 const FormSchema = z.object({
   name: z.string().min(2, {

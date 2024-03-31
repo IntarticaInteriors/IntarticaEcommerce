@@ -10,7 +10,7 @@ export const createCategory = async (payload) => {
   try {
     const config = { Headers: { Authorization: `Bearer ${token}` } };
     const response = await axios.post(
-      `${backendUrl}/products/create-category`,
+      `${backendUrl}/category/create-category`,
       payload,
       config
     );
@@ -28,7 +28,7 @@ export const getCategories = async () => {
   try {
     const config = { Headers: { Authorization: `Bearer ${token}` } };
     const response = await axios.get(
-      `${backendUrl}/products/get-category`,
+      `${backendUrl}/category/get-category`,
       config
     );
     return response.data;

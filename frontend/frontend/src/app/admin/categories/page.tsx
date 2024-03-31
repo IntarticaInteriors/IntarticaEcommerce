@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/table";
 
 import { getCategories } from "../../../services/category.services";
+import Link from "next/link";
 
 const data: Category[] = [
   {
@@ -119,9 +120,11 @@ const page = () => {
               ))}
           </DropdownMenuContent>
         </DropdownMenu>
-        <Button variant="default" className="ml-3" onClick={() => {}}>
-          Add Category
-        </Button>
+        <Link href="/admin/categories/add-category">
+          <Button variant="default" className="ml-3" onClick={() => {}}>
+            Add Category
+          </Button>
+        </Link>
       </div>
       <div className="rounded-md border">
         <Table>

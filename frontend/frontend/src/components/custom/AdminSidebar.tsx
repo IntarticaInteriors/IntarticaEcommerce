@@ -13,10 +13,10 @@ const AdminSidebar = () => {
     setActiveItem(index);
   };
   return (
-    <div className="admin-dashboard bg-red-500 flex flex-col items-center justify-between text-white h-full p-10">
+    <div className="admin-dashboard bg-[#E01859] flex flex-col items-center justify-between text-white h-full p-10">
       <div>
-        <h1 style={{ fontSize: "24px" }}>Admin Panel</h1>
-        <div className="admin-items">
+        <h1 className="text-2xl font-semibold">Admin Panel</h1>
+        <div className="admin-items text-center">
           <div
             className={`px-6 py-3 my-6 cursor-pointer ${
               activeItem === 0 ? "bg-white text-black" : ""

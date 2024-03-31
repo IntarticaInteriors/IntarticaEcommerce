@@ -101,7 +101,7 @@ const page = () => {
                 <Input
                   {...register("name", { required: true })}
                   type="text"
-                  placeholder="name"
+                  placeholder="Name"
                 />
                 {errors.name && (
                   <div className="text-red-500">{errors.name.message}</div>
@@ -109,7 +109,7 @@ const page = () => {
                 <Input
                   {...register("email", { required: true })}
                   type="text"
-                  placeholder="email"
+                  placeholder="Email"
                 />
                 {errors.email && (
                   <div className="text-red-500">{errors.email.message}</div>
@@ -118,7 +118,7 @@ const page = () => {
                 <Input
                   {...register("password", { required: true, minLength: 8 })}
                   type="password"
-                  placeholder="password"
+                  placeholder="Password"
                 />
                 {errors.password && (
                   <div className="text-red-500">{errors.password.message}</div>
@@ -130,7 +130,7 @@ const page = () => {
                     minLength: 8,
                   })}
                   type="password"
-                  placeholder="repeat Password"
+                  placeholder="Repeat Password"
                 />
                 {errors.confirmPassword && (
                   <div className="text-red-500">
@@ -177,7 +177,8 @@ const page = () => {
           alt="rectangle"
           width={650}
           height={650}
-          className=" bg-blend-overlay "
+          className=" bg-blend-overlay"
+          style={{ width: "100%", height: "100%" }}
         />
       </div>
     </div>

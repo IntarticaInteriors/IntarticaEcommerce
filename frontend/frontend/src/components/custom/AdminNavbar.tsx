@@ -8,6 +8,8 @@ import CommandSearch from "./CommandSearch";
 import { CiSearch } from "react-icons/ci";
 import { IoLocationOutline } from "react-icons/io5";
 import "./style.css";
+import profileImg from "../../assests/profile-img.png";
+import { RiCustomerService2Line } from "react-icons/ri";
 
 const AdminNavbar = () => {
   const [pincode, setPincode] = useState("123415");
@@ -16,12 +18,12 @@ const AdminNavbar = () => {
       <div>
         <Image src="/Logo.png" width={150} height={66} alt="logo" />
       </div>
-      <div className="flex  items-center">
+      <div className="flex items-center gap-5">
         <div className="avatar">
-          <img src="/Logo.png" alt="customer-img" width={100} height={100} />
+          <RiCustomerService2Line />
         </div>
         <div className="avatar">
-          <img src="/Logo.png" alt="profile-img" width={100} height={100} />
+          <img src={profileImg.src} alt="profile-img" />
         </div>
       </div>
     </div>
