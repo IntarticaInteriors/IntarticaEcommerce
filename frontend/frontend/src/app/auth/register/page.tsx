@@ -42,7 +42,7 @@ const page = () => {
   });
 
   const onSubmitHandler: SubmitHandler<FormField> = async (data: FormField) => {
-    console.log("data",data)
+    console.log("data", data);
     try {
       signup({
         name: data.name,
@@ -76,7 +76,7 @@ const page = () => {
     }
   };
   return (
-    <div className="flex">
+    <div className="flex justify-center">
       <div className="w-2/5 flex gap-2 h-screen justify-center">
         <div></div>
         <div className="flex flex-col justify-around h-screen py-4 items-center">
@@ -139,12 +139,12 @@ const page = () => {
                 )}
 
                 <div className="flex gap-3">
-                <input
-                  {...register("isBusiness", { required: true })}
-                  type="checkbox"
-                  id="isBusiness" // added id attribute
-                />
-                <label htmlFor="isBusiness">For Business</label>
+                  <input
+                    {...register("isBusiness", { required: true })}
+                    type="checkbox"
+                    id="isBusiness" // added id attribute
+                  />
+                  <label htmlFor="isBusiness">For Business</label>
                 </div>
                 <Button disabled={isSubmitting} type="submit">
                   {isSubmitting ? "Loading" : "Submit"}
