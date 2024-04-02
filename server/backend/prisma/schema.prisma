@@ -27,7 +27,7 @@ model User {
 model Projects {
   project_id   String  @id @default(uuid())
   User         User?   @relation(fields: [proj_user_id], references: [user_id])
-  proj_user_id String?
+  proj_user_id String? 
   title        String
   description  String?
   location     String?

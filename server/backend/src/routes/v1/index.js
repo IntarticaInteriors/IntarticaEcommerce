@@ -4,7 +4,7 @@ const userRoute = require('./user.route');
 const docsRoute = require('./docs.route');
 const config = require('../../config/config');
 const productRoute = require('./product.route');
-// const adminRoute = require('./admin.route');
+const projectRoute=require('./project.route');
 // const cartRoute = require('./cart.route');
 // const orderRoute = require('./order.route');
 const categoryRoute = require('./category.route');
@@ -28,11 +28,11 @@ const defaultRoutes = [
     path:'/products',
     route: productRoute,
   },
+  {
+    path:'/projects',
+    route:projectRoute
+  },
   //TODO 
-  // {
-  //   // path:'/admin',
-  //   // route:adminRoute,
-  // },
   // {
   //   // path:'/cart',
   //   // route:cartRoute,
