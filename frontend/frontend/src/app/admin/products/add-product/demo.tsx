@@ -13,14 +13,14 @@ const Page = () => {
 
     const formData = new FormData();
     files.forEach((file, index) => {
-      formData.append(`image`, file);
+      formData.append(image, file);
     });
     captions.forEach((caption, index) => {
-      formData.append(`captions[${index}]`, caption);
+      formData.append(captions[${index}], caption);
       console.log(files[index]);
     });
     console.log("formData",formData);
-    await axios.post(`${backendUrl}/products/create-product`, formData, {
+    await axios.post(${backendUrl}/products/create-product, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
   };

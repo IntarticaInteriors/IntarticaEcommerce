@@ -1,27 +1,12 @@
-// const express = require('express');
-// const router = express.Router();
-// const {
-//   getMyCart,
-//   addToCart,
-//   removeFromCart,
-//   updateCartItemQuantity,
-//   clearCart,
-//   applyCoupon,
-// } = require('../../controllers/cart.controller');
-// const {
-//   addToCartValidator,
-//   removeFromCartValidator,
-//   updateCartItemQuantityValidator,
-//   applyCouponValidator,
-// } = require('../../validations/cart.validation.js');
-
-// router.route('/').get(getMyCart).post(addToCartValidator, addToCart).delete(clearCart);
-
-// router.route('/apply-coupon').patch(applyCouponValidator, applyCoupon);
-
-// router
-//   .route('/:productId')
-//   .patch(updateCartItemQuantityValidator, updateCartItemQuantity)
-//   .delete(removeFromCartValidator, removeFromCart);
-
-// export default router;
+const express = require('express');
+const router = express.Router();
+const cartController = require('../../controllers/cart.controller');
+router.route('/get-cart').get(cartController.getCart);
+router.route('/add-to-cart').post(cartController.addToCart);
+router.route('/clear-cart').delete(cartController.clearCart);
+// router.route('/apply-coupon').patch(cartController.applyCoupon);
+router.route('/update-cart-item-quantity').patch(cartController.updateCartItemQuantity);
+router.route('/remove-from-cart').delete(cartController.removeFromCart);
+router.route('/get-total').get(cartController.getCartTotal);
+router.route('/transfer-cart-items').get(cartController.transferCartProject);
+module.exports = router;

@@ -1,10 +1,11 @@
 "use client"
-import Navbar from "@/components/custom/Navbar";
+import NavbarForHomePage from "@/components/custom/NavBarForHomePage";
+
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
         <div>
-          <Navbar />
+          <NavbarForHomePage />
           {children}
         </div>
     </>

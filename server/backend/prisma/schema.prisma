@@ -14,14 +14,16 @@ datasource db {
 }
 
 model User {
-  user_id   String     @id @default(uuid())
-  name String
-  email String @unique
-  address   String?
-  phone     String?
-  isBusiness  Boolean
-  projects  Projects[]
-  orders    Orders[]
+  user_id        String     @id @default(uuid())
+  name           String
+  email          String     @unique
+  address        String?
+  phone          String?
+  isBusiness     Boolean
+  projects       Projects[]
+  orders         Orders[]
+  profilePicture String?
+  reviews        Reviews[]
 }
 
 model Projects {
@@ -37,11 +39,12 @@ model Projects {
 }
 
 model Cart {
-  cart_id String @id @default(uuid())
-  Projects Projects?
-  items_in_cart Json
-  //ADD PRODUCT STAGING TABLE
-  // ADD CART STAGING TABLE
+  cart_id                 String    @id @default(uuid())
+  Projects                Projects?
+  items_in_cart           Json[]
+  totalPrice              Decimal   @default(0)
+  totalPriceAfterDiscount Decimal   @default(0)
+  Coupons                 Coupons[]
 }
 
 model Categories {
@@ -73,4 +76,24 @@ model Products {
   color          String?
   category_id    String
   images         String[]
+  Reviews        Reviews[]
+}
+
+model Reviews {
+  review_id       String    @id @default(uuid())
+  reviewText      String
+  rating          Int
+  User            User?     @relation(fields: [userUser_id], references: [user_id])
+  userUser_id     String?
+  product         Products? @relation(fields: [productsProd_id], references: [prod_id])
+  productsProd_id String?
+}
+
+model Coupons {
+  coupon_id String @id @default(uuid())
+  name      String
+  cart      Cart?  @relation(fields: [cartCart_id], references: [cart_id])
+  cartCart_id String?
+  expire DateTime
+  discount Decimal
 }

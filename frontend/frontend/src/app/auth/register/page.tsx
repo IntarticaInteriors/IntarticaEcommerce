@@ -42,7 +42,7 @@ const page = () => {
   });
 
   const onSubmitHandler: SubmitHandler<FormField> = async (data: FormField) => {
-    console.log("data",data)
+    console.log("data", data);
     try {
       signup({
         name: data.name,
@@ -76,7 +76,7 @@ const page = () => {
     }
   };
   return (
-    <div className="flex">
+    <div className="flex justify-center">
       <div className="w-2/5 flex gap-2 h-screen justify-center">
         <div></div>
         <div className="flex flex-col justify-around h-screen py-4 items-center">
@@ -101,7 +101,7 @@ const page = () => {
                 <Input
                   {...register("name", { required: true })}
                   type="text"
-                  placeholder="name"
+                  placeholder="Name"
                 />
                 {errors.name && (
                   <div className="text-red-500">{errors.name.message}</div>
@@ -109,7 +109,7 @@ const page = () => {
                 <Input
                   {...register("email", { required: true })}
                   type="text"
-                  placeholder="email"
+                  placeholder="Email"
                 />
                 {errors.email && (
                   <div className="text-red-500">{errors.email.message}</div>
@@ -118,7 +118,7 @@ const page = () => {
                 <Input
                   {...register("password", { required: true, minLength: 8 })}
                   type="password"
-                  placeholder="password"
+                  placeholder="Password"
                 />
                 {errors.password && (
                   <div className="text-red-500">{errors.password.message}</div>
@@ -130,7 +130,7 @@ const page = () => {
                     minLength: 8,
                   })}
                   type="password"
-                  placeholder="repeat Password"
+                  placeholder="Repeat Password"
                 />
                 {errors.confirmPassword && (
                   <div className="text-red-500">
@@ -139,12 +139,12 @@ const page = () => {
                 )}
 
                 <div className="flex gap-3">
-                <input
-                  {...register("isBusiness", { required: true })}
-                  type="checkbox"
-                  id="isBusiness" // added id attribute
-                />
-                <label htmlFor="isBusiness">For Business</label>
+                  <input
+                    {...register("isBusiness", { required: true })}
+                    type="checkbox"
+                    id="isBusiness" // added id attribute
+                  />
+                  <label htmlFor="isBusiness">For Business</label>
                 </div>
                 <Button disabled={isSubmitting} type="submit">
                   {isSubmitting ? "Loading" : "Submit"}
@@ -177,7 +177,8 @@ const page = () => {
           alt="rectangle"
           width={650}
           height={650}
-          className=" bg-blend-overlay "
+          className=" bg-blend-overlay"
+          style={{ width: "100%", height: "100%" }}
         />
       </div>
     </div>

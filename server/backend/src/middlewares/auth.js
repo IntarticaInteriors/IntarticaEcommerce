@@ -6,6 +6,7 @@ const { roleRights } = require('../config/roles');
 const auth = (...requiredRights) => async (req, res, next) => {
   return new Promise((resolve, reject) => {
     passport.authenticate('jwt', { session: false }, function callback(err, user, info, status) {
+      console.log(user,info,err);
       if (err || info || !user) {
         return reject(new ApiError(httpStatus.UNAUTHORIZED, 'Please authenticate'));
       }
