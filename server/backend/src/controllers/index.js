@@ -3,3 +3,4 @@ module.exports.userController = require('./user.controller');
 module.exports.categoryController = require('./category.controller');
 module.exports.productController=require('./product.controller');
 module.exports.projectController=require('./project.controller');
+module.exports.ordersController=require('./orders.controller')

@@ -15,7 +15,7 @@ const createProduct = catchAsync(async (req, res) => {
   const createdProduct = await productService.createProduct(req.body, req.files);
   // console.log(createdProduct);
   // res.status(httpStatus.CREATED).send(createdProduct);
-  res.send(req.files);
+  res.send(createdProduct);
 });
 
 const getProducts = catchAsync(async (req, res) => {

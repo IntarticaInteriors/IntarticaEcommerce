@@ -5,8 +5,8 @@ const docsRoute = require('./docs.route');
 const config = require('../../config/config');
 const productRoute = require('./product.route');
 const projectRoute=require('./project.route');
-// const cartRoute = require('./cart.route');
-// const orderRoute = require('./order.route');
+const cartRoute = require('./cart.route');
+const orderRoute = require('./order.route');
 const categoryRoute = require('./category.route');
 
 const router = express.Router();
@@ -32,15 +32,15 @@ const defaultRoutes = [
     path:'/projects',
     route:projectRoute
   },
+  // {
+  //   path:'/orders',
+  //   route:orderRoute,
+  // },
+  {
+    path:'/cart',
+    route:cartRoute,
+  },
   //TODO 
-  // {
-  //   // path:'/cart',
-  //   // route:cartRoute,
-  // },
-  // {
-  //   // path:'/order',
-  //   // route:orderRoute,
-  // },
   
 ];
 

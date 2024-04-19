@@ -11,9 +11,16 @@ const createProject = catchAsync(async (req, res) => {
 });
 
 const getProjects = catchAsync(async (req, res) => {
+  console.log(req.body);
   const results = await projectService.getAllProjects(req.body);
   res.send(results);
 });
+
+// const getProjectForUser = catchAsync(async (req, res) => {
+//   const results = await projectService.getAllProjects(req.body);
+//   res.send(results);
+// });
+
 
 const getProjectById = catchAsync(async (req, res) => {
   const project = await projectService.getProjectById(req.params.proj_id);
