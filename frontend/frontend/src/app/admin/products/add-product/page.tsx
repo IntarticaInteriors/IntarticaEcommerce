@@ -39,7 +39,6 @@ const FormSchema = z.object({
   discount: z.number().int().min(0, {
     message: "Discount must be a non-negative integer.",
   }),
-  // picture: z.string(),
   stockAvailable: z.number().int().min(0, {
     message: "Stock Available must be a non-negative integer.",
   }),
@@ -63,12 +62,14 @@ const Page = () => {
         </pre>
       ),
     });
+
     console.log(data);
 
     const formData = new FormData();
-    files.forEach((file, index) => {
-      formData.append(image, file);
+    data?.images?.forEach((file, index) => {
+      formData.append("image", file);
     });
+    
 
     const {
       name,
@@ -82,11 +83,21 @@ const Page = () => {
       Category,
     } = data;
 
-    formData.append(name, name);
-    console.log(formData);
+    formData.append("name", name);
+    formData.append("description", description);
+    formData.append("brand", brand);
+    formData.append("size", size.toString());
+    formData.append("price", price.toString());
+    formData.append("discount", discount.toString());
+    formData.append("stockAvailable", stockAvailable.toString());
+    formData.append("color", color);
+    formData.append("Category", Category);
 
+    console.log("dataimages",data?.images);
+    console.log(formData.getAll("image"));
+    
     try {
-      const response = createProduct(data);
+      const response = createProduct(formData);
       console.log("created products:", response);
     } catch (err) {
       console.log(err);
@@ -203,13 +214,17 @@ const Page = () => {
                   multiple
                   placeholder="Picture URL"
                   type="file"
-                  {...field}
+                  onChange={(event) => {
+                    const files = Array.from(event.target.files);
+                    field.onChange(files);
+                  }}
                 />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="stockAvailable"
@@ -246,7 +261,7 @@ const Page = () => {
           name="Category"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Category ID</FormLabel>
+              <FormLabel>Category</FormLabel>
               <FormControl>
                 <Input placeholder="Category" {...field} />
               </FormControl>

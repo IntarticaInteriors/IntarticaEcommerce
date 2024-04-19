@@ -15,6 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { login } from "@/services/axiosreq";
 import Image from "next/image";
+import Link from "next/link";
 
 const page = () => {
   const [invalid, setInvalid] = useState();
@@ -111,7 +112,8 @@ const page = () => {
           </CardContent>
         </Card>
       </div>
-      <div>Dont have an account</div>
+      <div>Dont have an account? <Link href="register">Signup</Link>
+      </div>
     </div>
   );
 };

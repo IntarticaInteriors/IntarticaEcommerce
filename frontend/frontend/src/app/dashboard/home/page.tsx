@@ -1,5 +1,8 @@
+"use client";
 import React from "react";
 import plywood from "../../../assests/products/plywood.jpeg";
+import { Card, CardHeader, CardBody, Image } from "@nextui-org/react";
+
 import Link from "next/link";
 
 const Page = () => {
@@ -37,30 +40,28 @@ const Page = () => {
   ];
   return (
     <>
-      <h1 className="text-center my-5 font-bold text-2xl ">Plywood</h1>
-      <div className="container py-10 flex gap-10 flex-wrap justify-start align-center">
+      <h1 className="text-center my-5 font-bold  text-2xl ">Plywood</h1>
+      <div className="container py-10 flex gap-10 flex-wrap grid grid-cols-3 justify-start  align-center">
         {plywoodComponents.map((plywoodComp) => (
           <Link href={`/product/${plywoodComp.title}`} key={plywoodComp.title}>
-            <div
-              className="max-w-sm rounded overflow-hidden shadow-lg"
-              style={{ width: "300px", height: "300px" }}
-            >
-              <img
-                className="w-full"
-                src={plywoodComp.src.src}
-                // height={100}
-                alt="Plywood"
-                style={{ width: "100%", height: "200px" }}
-              />
-              <div className="px-6 py-4 text-center">
-                <div className="font-bold text-md mb-2">
+            <Card className="py-4 z-0 ">
+              <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
+                <p className="text-lg uppercase font-bold">
                   {plywoodComp.title}
-                </div>
-                <p className="text-gray-700 text-base">
-                  Price - {plywoodComp.price}-
                 </p>
-              </div>
-            </div>
+                <small className="text-default-500">Price</small>
+                <h4 className="font-bold text-large">{plywoodComp.price}</h4>
+              </CardHeader>
+              <CardBody className="overflow-visible py-2">
+                <Image
+                  isZoomed
+                  alt="Card background"
+                  className=" object-contain rounded-xl"
+                  src={plywoodComp.src.src}
+                  width={200}
+                />
+              </CardBody>
+            </Card>
           </Link>
         ))}
       </div>
