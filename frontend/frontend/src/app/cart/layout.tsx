@@ -10,12 +10,31 @@ import {
   Breadcrumbs,
 } from "@nextui-org/react";
 import NavBarForHomePage from "@/components/custom/NavBarForHomePage";
+import { cart, checkout, completed } from "@/components/custom";
+import { usePathname } from "next/navigation";
 const layout = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
-  const disabledItems = ["checkout", "completed"];
+  const pathname = usePathname();
+  console.log("this is path", pathname);
+  // Define a function to render content based on the current route
+  const renderContent = () => {
+    switch (pathname) {
+      case "/cart/shopping":
+        return "Cart";
+      case "/cart/checkout":
+        return "Checkout";
+      case "/cart/completed":
+        return "Completed";
+      default:
+        return <div>Page not found</div>;
+    }
+  };
+  const title=renderContent();
+  // const disabledItems = ["checkout", "completed"];
+  const disabledItems = [];
 
   return (
     <>
@@ -23,42 +42,23 @@ const layout = ({
       <div className="container m-10">
         <div className="flex justify-center">
           <Breadcrumbs variant="solid" size="lg">
-            <BreadcrumbItem>Home</BreadcrumbItem>
-            <BreadcrumbItem>Cart</BreadcrumbItem>
+            <BreadcrumbItem>Shopping</BreadcrumbItem>
+            <BreadcrumbItem>{renderContent()}</BreadcrumbItem>
           </Breadcrumbs>
         </div>
-        <Tabs disabledKeys={disabledItems} aria-label="Disabled Options">
-          <Tab key="photos" title="Step 1: Shopping Cart">
-            <div>
-              {/* <divBody> */}
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-              {/* </divBody> */}
-            </div>
+        <Tabs disabledKeys={disabledItems} selectedKey={pathname} aria-label="Disabled Options">
+          <Tab key="/cart/shopping" title="Step 1: Shopping Cart" href="/cart/shopping">
+            <div>{children}</div>
           </Tab>
-          <Tab key="checkout" title="Step 2: Checkout">
-            <Card>
-              <CardBody>
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
-                dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                fugiat nulla pariatur.
-              </CardBody>
-            </Card>
+          <Tab key="/cart/checkout" title="Step 2: Checkout" href="/cart/checkout">
+            <div>{children}</div>
           </Tab>
-          <Tab key="completed" title="Step 3: Completed">
-            <Card>
-              <CardBody>
-                Excepteur sint occaecat cupidatat non proident, sunt in culpa
-                qui officia deserunt mollit anim id est laborum.
-              </CardBody>
-            </Card>
+          <Tab key="/cart/completed" title="Step 3: Completed" href="/cart/completed">
+            <div>{children}</div>
           </Tab>
         </Tabs>
       </div>
-      <div>{children}</div>
+      {/* <div>{children}</div> */}
     </>
   );
 };

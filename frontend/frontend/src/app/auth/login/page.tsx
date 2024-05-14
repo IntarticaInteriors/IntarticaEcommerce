@@ -13,11 +13,12 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { login } from "@/services/axiosreq";
+import { login } from "@/services/authServices";
 import Image from "next/image";
 import Link from "next/link";
-
+import {useRouter} from "next/navigation";
 const page = () => {
+  const router=useRouter()
   const [invalid, setInvalid] = useState();
   const [accessToken, setAccessToken] = useState("");
   const schema = z.object({
@@ -41,6 +42,8 @@ const page = () => {
         .then((res) => {
           console.log("success", res);
           localStorage.setItem("accessToken", res.tokens.access.token);
+          router.push('/projects');
+          
         })
         .catch((error) => {
           console.log("error", error);

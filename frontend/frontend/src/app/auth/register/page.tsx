@@ -4,7 +4,7 @@ import { setCookie, parseCookies } from "nookies";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { signup } from "../../../services/axiosreq";
+import { signup } from "../../../services/authServices";
 import { Checkbox } from "@/components/ui/checkbox";
 
 // import { FormField } from "@/types/signupForm";
@@ -17,10 +17,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/router";
+import { useRouter } from 'next/navigation'
 import Image from "next/image";
 import { z } from "zod";
 const page = () => {
+  const router=useRouter();
   const [accessToken, setAccessToken] = useState("");
   const schema = z.object({
     name: z.string(),
@@ -62,7 +63,7 @@ const page = () => {
 
           // Update the state with the access token
           setAccessToken(accessToken);
-
+          router.push("/auth/login");
           console.log("accessToken", accessToken);
         })
         .catch((err) => {
