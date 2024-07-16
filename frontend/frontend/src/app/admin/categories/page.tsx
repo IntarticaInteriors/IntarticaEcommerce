@@ -28,13 +28,13 @@ import {
 import { getCategories } from "../../../services/category.services";
 import Link from "next/link";
 
-const data: Category[] = [
-  {
-    category_id: "1",
-    name: "Wood",
-    description: "Description for wood category",
-  },
-];
+// const data: Category[] = [
+//   {
+//     category_id: "1",
+//     name: "Wood",
+//     description: "Description for wood category",
+//   },
+// ];
 
 export type Category = {
   category_id: string;
@@ -56,6 +56,7 @@ const columns: ColumnDef<Category>[] = [
 ];
 
 const page = () => {
+  const [data, setData] = useState([]);
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
@@ -79,8 +80,14 @@ const page = () => {
 
   useEffect(() => {
     try {
-      const response = getCategories();
-      console.log("get categories:", response);
+      getCategories()
+        .then((res) => {
+          setData(res);
+          console.log("get data:", res);
+        })
+        .catch((err) => {
+          console.log("err in getting res from getCategories");
+        });
     } catch (err) {
       console.log(err);
     }

@@ -1,8 +1,8 @@
-"use client"
+"use client";
 import { Inter } from "next/font/google";
 import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
-import { UserContext } from "@/contexts/userContext";
+import { UserProvider } from "@/contexts/userContext";
 
 export default function RootLayout({
   children,
@@ -10,11 +10,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <UserContext.Provider value={{ name: "sumedh" }}>
-      <html lang="en">
+    <html lang="en">
+      <UserProvider>
         <body className={inter.className}>{children}</body>
-      </html>
-      </UserContext.Provider>
-
+      </UserProvider>
+    </html>
   );
 }

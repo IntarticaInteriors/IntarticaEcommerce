@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Coupons" ALTER COLUMN "expire" DROP NOT NULL,
+ALTER COLUMN "discount" DROP NOT NULL;

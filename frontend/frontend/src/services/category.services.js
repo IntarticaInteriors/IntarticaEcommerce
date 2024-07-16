@@ -6,7 +6,7 @@ const backendUrl = "http://localhost:3000/v1"; // Replace with your actual varia
 export const createCategory = async (payload) => {
   console.log("backendurl", backendUrl);
   const token = localStorage.getItem("accessToken");
-  console.log(token);
+  console.log("token in createCategory",token);
   try {
     const config = { Headers: { Authorization: `Bearer ${token}` } };
     const response = await axios.post(
@@ -24,7 +24,7 @@ export const createCategory = async (payload) => {
 export const getCategories = async () => {
   console.log("backendurl", backendUrl);
   const token = localStorage.getItem("accessToken");
-  console.log(token);
+  console.log("token in getCategories",token);
   try {
     const config = { Headers: { Authorization: `Bearer ${token}` } };
     const response = await axios.get(

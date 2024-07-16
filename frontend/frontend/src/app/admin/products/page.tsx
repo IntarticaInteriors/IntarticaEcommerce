@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 import {
   ColumnDef,
@@ -24,50 +25,52 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { getProducts } from "../../../services/admin.services";
+import { getProducts } from "@/services/admin.services";
+import { getCategories } from "../../../services/category.services";
 import Link from "next/link";
 
-const data: Product[] = [
-  {
-    id: "1",
-    productName: "Fire Retardant Plywood",
-    category: "Plywood",
-    price: "Rs. 3500/-",
-    piece: 9,
-    availableSize: ["4mm", "6mm", "9mm"],
-  },
-];
+// const data: Product[] = [
+//   {
+//     category_id: "1",
+//     name: "Wood",
+//     description: "Description for wood category",
+//   },
+// ];
 
 export type Product = {
-  id: string;
-  productName: string;
-  category: string;
+  prod_id: string;
+  name: string;
+  description?: string;
+  size: string;
   price: string;
-  piece: number;
-  availableSize: string[];
+  brand: string;
+  discount: string;
+  stockAvailble: number;
+  category: string;
+  color: string;
+  avatar: string;
 };
 
 const columns: ColumnDef<Product>[] = [
   {
-    accessorKey: "image",
-    header: "Image",
-    cell: ({ row }) => (
-      <img
-        src={row.getValue("image")}
-        alt="Product"
-        style={{ width: "50px", height: "50px" }}
-      />
-    ),
+    accessorKey: "name",
+    header: "Name",
+    cell: ({ row }) => <div>{row.getValue("name")}</div>,
   },
   {
-    accessorKey: "productName",
-    header: "Product Name",
-    cell: ({ row }) => <div>{row.getValue("productName")}</div>,
+    accessorKey: "description",
+    header: "Description",
+    cell: ({ row }) => <div>{row.getValue("description")}</div>,
   },
   {
-    accessorKey: "category",
-    header: "Category",
-    cell: ({ row }) => <div>{row.getValue("category")}</div>,
+    accessorKey: "size",
+    header: "Size",
+    cell: ({ row }) => <div>{row.getValue("size")}</div>,
+  },
+  {
+    accessorKey: "color",
+    header: "Color",
+    cell: ({ row }) => <div>{row.getValue("color")}</div>,
   },
   {
     accessorKey: "price",
@@ -75,58 +78,43 @@ const columns: ColumnDef<Product>[] = [
     cell: ({ row }) => <div>{row.getValue("price")}</div>,
   },
   {
-    accessorKey: "piece",
-    header: "Piece",
-    cell: ({ row }) => <div>{row.getValue("piece")}</div>,
+    accessorKey: "brand",
+    header: "Brand",
+    cell: ({ row }) => <div>{row.getValue("brand")}</div>,
+
   },
   {
-    accessorKey: "availableSize",
-    header: "Available Size",
-    cell: ({ row }) => (
-      <div>
-        {(row.getValue("availableSize") as string[]).map((size, index) => (
-          <span key={index}>{size}</span>
-        ))}
-      </div>
-    ),
+    accessorKey: "stockAvailable",
+    header: "Stock Available",
+    cell: ({ row }) => <div>{row.getValue("stockAvailable")}</div>,
   },
   {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="h-8 w-8 p-0">
-            <span className="sr-only">Open menu</span>
-            <ChevronDown className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <Button variant="default" onClick={() => handleEdit(row)}>
-            Edit
-          </Button>
-          <Button variant="default" onClick={() => handleDelete(row)}>
-            Delete
-          </Button>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    ),
+    accessorKey: "category",
+    header: "Category",
+    cell: ({ row }) => <div>{row.getValue("category")}</div>,
   },
+  {
+    accessorKey: "discount",
+    header: "Discount",
+    cell: ({ row }) => <div>{row.getValue("discount")}</div>,
+  },
+  {
+    accessorKey: "avatar",
+    header: "Avatar",
+    cell: ({ row }) => <Link href={row.getValue("avatar")} >Link</Link>,
+  },
+
 ];
 
-const handleEdit = (row) => {
-  // Handle edit action
-};
-
-const handleDelete = (row) => {
-  // Handle delete action
-};
 
 const page = () => {
+  const [data, setData] = useState([]);
   const [sorting, setSorting] = useState([]);
   const [columnFilters, setColumnFilters] = useState([]);
   const [columnVisibility, setColumnVisibility] = useState({});
   const [rowSelection, setRowSelection] = useState({});
+  const [apiProducts, setApiProducts] = useState(null);
+  const [updateProds, setUpdatedProds] = useState([]);
 
   const table = useReactTable({
     data,
@@ -141,28 +129,72 @@ const page = () => {
       columnVisibility,
       rowSelection,
     },
-    getCoreRowModel: getCoreRowModel(), // Include getCoreRowModel here
+    getCoreRowModel: getCoreRowModel(),
   });
+
 
   useEffect(() => {
     try {
-      const response = getProducts();
-      console.log("get products:", response);
+      getProducts().then((res) => {
+        setApiProducts(res);
+        console.log(res);
+      });
     } catch (err) {
       console.log(err);
     }
   }, []);
+  useEffect(() => {
+    let updatedProducts = apiProducts?.map((elem, idx) => {
+      const {
+        imageUrl,
+        images,
+        category_id,
+        picture,
+        categoryname,
+        // stockAvailable,
+        ...newObj
+      } = elem;
+      // console.log("stock",StockAvailable);
+      return {
+        ...newObj,
+        avatar: imageUrl,
+        // status: "inStock",
+        discount: "0",
+        category: categoryname ?? "alsdkfna;df",
+      };
+    });
+    console.log("updatedProducts", updatedProducts);
+    setData(updatedProducts);
+  }, [apiProducts]);
+
+  // useEffect(() => {
+  //   try {
+  //     getCategories()
+  //       .then((res) => {
+  //         setData(res);
+  //         console.log("get data:", res);
+  //       })
+  //       .catch(err);
+  //     {
+  //       console.log("err in getting res from getCategories");
+  //     }
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // }, []);
+  useEffect(()=>{
+    console.log("data",data)
+  },[data]);
 
   return (
-    <div className="w-full">
+    <>
+  { data && <div className="container w-full">
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter products..."
-          value={
-            (table.getColumn("productName")?.getFilterValue() as string) ?? ""
-          }
+          placeholder="Filter categories..."
+          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("productName")?.setFilterValue(event.target.value)
+            table.getColumn("name")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
@@ -222,10 +254,7 @@ const page = () => {
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
-                      {/* Check if the cell belongs to the 'image' column */}
-                      {cell.column.accessorKey === "image"
-                        ? cell.column.columnDef.cell(cell)
-                        : cell.column.columnDef.cell(cell)}
+                      {cell.column.columnDef.cell(cell)}
                     </TableCell>
                   ))}
                 </TableRow>
@@ -240,7 +269,7 @@ const page = () => {
                 </TableCell>
               </TableRow>
             )}
-          </TableBody>
+          </TableBody> 
         </Table>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
@@ -248,9 +277,8 @@ const page = () => {
           {table.getFilteredSelectedRowModel().rows.length} of{" "}
           {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
-        {/* Pagination buttons */}
       </div>
-    </div>
+    </div>}</>
   );
 };
 

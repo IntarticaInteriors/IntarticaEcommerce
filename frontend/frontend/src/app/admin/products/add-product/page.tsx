@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -13,12 +13,23 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
 
 //API's
 import { createProduct } from "../../../../services/admin.services";
+import { getCategories } from "@/services/category.services";
 
 const FormSchema = z.object({
   name: z.string().min(2, {
@@ -49,6 +60,24 @@ const FormSchema = z.object({
 
 const Page = () => {
   const [files, setFiles] = useState([]);
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    try {
+      getCategories()
+        .then((res) => {
+          setCategories(res);
+          console.log("get data:", res);
+        })
+        .catch(err);
+      {
+        console.log("err in getting res from getCategories");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
@@ -69,7 +98,6 @@ const Page = () => {
     data?.images?.forEach((file, index) => {
       formData.append("image", file);
     });
-    
 
     const {
       name,
@@ -93,12 +121,17 @@ const Page = () => {
     formData.append("color", color);
     formData.append("Category", Category);
 
-    console.log("dataimages",data?.images);
+    console.log("dataimages", data?.images);
     console.log(formData.getAll("image"));
-    
+
     try {
-      const response = createProduct(formData);
-      console.log("created products:", response);
+      createProduct(formData)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } catch (err) {
       console.log(err);
     }
@@ -256,45 +289,41 @@ const Page = () => {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="Category"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Category</FormLabel>
-              <FormControl>
-                <Input placeholder="Category" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        {/* Assuming images are entered as comma-separated URLs */}
-        {/* https://example.com/image1.jpg, https://example.com/image2.jpg, https://example.com/image3.jpg */}
-        {/* <FormField
-          control={form.control}
-          name="images"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Images (comma-separated URLs)</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Image URLs"
-                  {...field}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    // Split the comma-separated string into an array of URLs
-                    const urls = value.split(",").map((url) => url.trim());
-                    // Update the field value with the array of URLs
-                    field.onChange(urls);
-                  }}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        /> */}
-
+        {categories && (
+          <FormField
+            control={form.control}
+            name="Category"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Category</FormLabel>
+                <FormControl>
+                  <Select
+                    {...field}
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Select a Category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Category</SelectLabel>
+                        {categories.map((ele, idx) => {
+                          return (
+                            <SelectItem value={ele.name} key={idx}>
+                              {ele.name}
+                            </SelectItem>
+                          );
+                        })}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
         <Button type="submit">Submit</Button>
       </form>
     </Form>

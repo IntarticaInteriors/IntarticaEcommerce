@@ -7,10 +7,12 @@ const categoryController = require('../../controllers/category.controller');
 const router = express.Router();
 
 router.route('/create-category').post(
-  auth('manageCategories'),
+  // auth('manageCategories'),
   validate(categoryValidation.createCategory), categoryController.createCategory);
 
-router.route('/get-category').get(auth('getCategories'), categoryController.getCategories);
+router.route('/get-category').get(
+  // auth('getCategories'),
+   categoryController.getCategories);
 
 router
   .route('/get-category/:category_id')

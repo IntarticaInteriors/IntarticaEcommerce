@@ -4,6 +4,12 @@ const userService = require('./user.service');
 const Token = require('../models/token.model');
 const ApiError = require('../utils/ApiError');
 const { tokenTypes } = require('../config/tokens');
+const {PrismaClient}=require("@prisma/client")
+
+
+const prisma= new PrismaClient();
+
+
 
 /**
  * Login with username and password
@@ -18,6 +24,22 @@ const loginUserWithEmailAndPassword = async (email, password) => {
   }
   return user;
 };
+
+/**
+ * Additional information using email
+ * @param {string} email
+ * @returns {Promise<User>}
+ */
+const UserFromPostgres = async (email, password) => {
+  const user=await prisma.user.findFirst({
+    where:{
+      email:email
+    }
+  })
+  return user;
+};
+
+
 
 /**
  * Logout
@@ -93,6 +115,7 @@ const verifyEmail = async (verifyEmailToken) => {
 module.exports = {
   loginUserWithEmailAndPassword,
   logout,
+  UserFromPostgres,
   refreshAuth,
   resetPassword,
   verifyEmail,

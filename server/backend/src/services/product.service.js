@@ -22,9 +22,8 @@ const s3 = new S3Client({
  */
 
 const createProduct = async (productBody, productFiles) => {
-
   const { name, description, Category, brand, size, price, stockAvailable, color } = productBody;
-  
+
   let Names = [];
   for (const elem of productFiles) {
     const Imagename = RandomImageName();
@@ -33,7 +32,7 @@ const createProduct = async (productBody, productFiles) => {
       Bucket: 'eazymaterials',
       Key: Imagename,
       Body: elem.buffer,
-      ContentType: "image/jpeg",
+      ContentType: 'image/jpeg',
     };
 
     const command = new PutObjectCommand(params);
@@ -57,9 +56,17 @@ const createProduct = async (productBody, productFiles) => {
       stockAvailable: parseInt(stockAvailable),
       color: color,
       images: Names,
+      categoryname:Category,
     },
   });
-  return createdProduct;
+
+  const category = await prisma.categories.findFirst({
+    where: {
+      category_id: createdProduct.category_id,
+    },
+  });
+  let responseProduct={...createdProduct,categoryname:category?.name};
+  return responseProduct;
   // return 'uploaded product';
 };
 /**
@@ -91,15 +98,15 @@ const getAllProducts = async () => {
  */
 const getProductById = async (prod_id) => {
   const foundProduct = await prisma.products.findUnique({ where: { prod_id: prod_id } });
-  foundProduct.imagesURLS=[];
-  for(const image of foundProduct.images){
+  foundProduct.imagesURLS = [];
+  for (const image of foundProduct.images) {
     const getObjectParams = {
       Bucket: 'eazymaterials',
       Key: image,
     };
     const command = new GetObjectCommand(getObjectParams);
     const url = await getSignedUrl(s3, command);
-    foundProduct.imagesURLS = [...foundProduct.imagesURLS,url];
+    foundProduct.imagesURLS = [...foundProduct.imagesURLS, url];
   }
   console.log('product', foundProduct);
   return foundProduct;

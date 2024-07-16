@@ -12,7 +12,8 @@ const login = catchAsync(async (req, res) => {
   const { email, password } = req.body;
   const user = await authService.loginUserWithEmailAndPassword(email, password);
   const tokens = await tokenService.generateAuthTokens(user);
-  res.send({ user, tokens });
+  const user2=await authService.UserFromPostgres(email);
+  res.send({ user, tokens,user2 });
 });
 
 const logout = catchAsync(async (req, res) => {

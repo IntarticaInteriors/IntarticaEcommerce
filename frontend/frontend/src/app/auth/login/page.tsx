@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   Card,
   CardContent,
@@ -16,9 +16,12 @@ import { z } from "zod";
 import { login } from "@/services/authServices";
 import Image from "next/image";
 import Link from "next/link";
-import {useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
+import { UserContext } from "@/contexts/userContext";
 const page = () => {
-  const router=useRouter()
+  // const [state,dispatch]=useContext(UserContext);
+
+  const router = useRouter();
   const [invalid, setInvalid] = useState();
   const [accessToken, setAccessToken] = useState("");
   const schema = z.object({
@@ -26,6 +29,7 @@ const page = () => {
     password: z.string().min(8),
   });
   type FormField = z.infer<typeof schema>;
+
   const {
     register,
     handleSubmit,
@@ -42,8 +46,23 @@ const page = () => {
         .then((res) => {
           console.log("success", res);
           localStorage.setItem("accessToken", res.tokens.access.token);
-          router.push('/projects');
-          
+          localStorage.setItem("userId", res.user2.user_id);
+          // const addUser = () => {
+          //   dispatch({
+          //     type: 'ADD_USER',
+          //     payload: {
+          //       user_id: '6373c16a-d0c2-4768-8dd1-ca73fa447901',
+          //       name: 'testing1',
+          //       email: 'testing1@intartica.com',
+          //       address: null,
+          //       phone: null,
+          //       isBusiness: true,
+          //       profilePicture: null,
+          //     },
+          //   });
+          // };
+          // console.log("state is ",state)
+          router.push("/projects");
         })
         .catch((error) => {
           console.log("error", error);
@@ -115,7 +134,8 @@ const page = () => {
           </CardContent>
         </Card>
       </div>
-      <div>Dont have an account? <Link href="register">Signup</Link>
+      <div>
+        Dont have an account? <Link href="register">Signup</Link>
       </div>
     </div>
   );
